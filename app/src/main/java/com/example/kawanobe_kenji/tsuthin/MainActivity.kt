@@ -7,6 +7,8 @@ import android.widget.TextView
 
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import org.jsoup.Jsoup
+import java.io.IOException
 
 
 class MainActivity : AppCompatActivity() {
@@ -40,8 +42,25 @@ class MainActivity : AppCompatActivity() {
 
 fun getHtml(): String {
     val client = OkHttpClient()
-    val req = Request.Builder().url("http://www.google.co.jp").get().build()
+    var url = "https://item.mercari.com/jp/m87035931007/"
+    val req = Request.Builder().url(url).get().build()
     val resp = client.newCall(req).execute()
-    return resp.body()!!.string()
+    /* スクレイピングの実装 */
+    try {
+        val document = Jsoup.connect(url).get()
+        var elements = document.select("span")
+        for (element in elements) {
+            System.out.println()
+
+            if ( element.attr("class").equals("item-price bold") ) {
+                return element.text().toString()
+            }
+        }
+        return elements.text().toString()
+    } catch (e: IOException) {
+        e.printStackTrace()
+    }
+    return ""
+    //return resp.body()!!.string()
 }
 
