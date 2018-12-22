@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+    android:id="@+id/Name"
+    android:layout_width="wrap_content"
+    android:layout_height="70dp"
+    android:textColor="#000"
+    android:padding="5dp"
+    android:gravity="center_vertical"
+    android:maxLines="1"
+    android:text="商品名"/>
+
+    <TextView
+        android:id="@+id/beforePrice"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:textColor="#000"
+        android:padding="5dp"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:text="登録時の価格"/>
+
+    <TextView
+        android:id="@+id/nowPrice"
+        android:layout_width="wrap_content"
+        android:layout_height="70dp"
+        android:textColor="#000"
+        android:padding="5dp"
+        android:gravity="center_vertical"
+        android:maxLines="1"
+        android:text="現在の価格"/>
+
+</LinearLayout>
