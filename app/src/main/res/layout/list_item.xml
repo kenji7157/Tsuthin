@@ -1,37 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="horizontal"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+
     <TextView
-    android:id="@+id/Name"
-    android:layout_width="wrap_content"
-    android:layout_height="70dp"
-    android:textColor="#000"
-    android:padding="5dp"
-    android:gravity="center_vertical"
-    android:maxLines="1"
-    android:text="商品名"/>
+        android:id="@+id/name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="商品名"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/beforePrice"
+        app:layout_constraintStart_toStartOf="parent"
+        tools:layout_editor_absoluteY="16dp" />
 
     <TextView
         android:id="@+id/beforePrice"
         android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:textColor="#000"
-        android:padding="5dp"
-        android:gravity="center_vertical"
-        android:maxLines="1"
-        android:text="登録時の価格"/>
+        android:layout_height="wrap_content"
+        android:text="登録時価格"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toStartOf="@+id/nowPrice"
+        app:layout_constraintStart_toEndOf="@+id/name"
+        tools:layout_editor_absoluteY="16dp" />
 
     <TextView
         android:id="@+id/nowPrice"
         android:layout_width="wrap_content"
-        android:layout_height="70dp"
-        android:textColor="#000"
-        android:padding="5dp"
-        android:gravity="center_vertical"
-        android:maxLines="1"
-        android:text="現在の価格"/>
-
-</LinearLayout>
+        android:layout_height="wrap_content"
+        android:text="最新価格"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/beforePrice"
+        tools:layout_editor_absoluteY="16dp" />
+</android.support.constraint.ConstraintLayout>
