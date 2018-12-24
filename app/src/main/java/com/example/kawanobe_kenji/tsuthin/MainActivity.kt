@@ -34,10 +34,9 @@ class MainActivity : AppCompatActivity() {
 
         // getPriceButton押下時のイベント処理
         findViewById<View>(R.id.getPriceButton).setOnClickListener {
-            // 非同期処理が実行される
-            System.out.println("非同期処理が実行される")
-            //MyAsyncTask().execute()
+            // テキストビューの入力値をurl情報に格納する
             url = findViewById<TextView>(R.id.urlText).text.toString()
+            // 非同期処理が実行される 引数にthis:MainActivity を設定する。
             GoodsAsyncTask().execute(this)
         }
     }
@@ -51,51 +50,37 @@ class MainActivity : AppCompatActivity() {
     // 設置したメニューの項目がクリックされた時に呼ばれる
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.getItemId()) {
-//            R.id.home -> {
-//                // main画面に切り替える
-//                setContentView(R.layout.activity_main)
-//                // Toolbar用の変数を用意
-//                var toolbar = findViewById<Toolbar>(R.id.toolbar)
-//                // setSupportActionBar()によってtoolbarをActionBarと同じ様に使う事ができる
-//                setSupportActionBar(toolbar)
-//            }
 
+            // メニュー:R.id.record押下時のイベント
             R.id.record -> {
-
-
-                // record画面に切り替える
+                // record画面に切り替える為のインテントの生成
                 val intent = Intent(this, RecordActivity::class.java)
-                // 変数sendGoodsDataListにsendGoodsDataListを格納する
+                // 変数sendGoodsDataListにgoodsDataListを格納する
                 val sendGoodsDataList = goodsDataList
-                //intent変数をつなげる(第一引数はキー，第二引数は渡したい変数)
+                // 生成したインテントに変数sendGoodsDataListを格納する。(第一引数はキー，第二引数は渡したい変数)
                 intent.putExtra("goodsDataList",sendGoodsDataList)
-
+                // インテント情報を引き渡しrecord画面に切り替える
                 startActivity(intent)
                 // Activity遷移時のアニメーションを無効化
                 overridePendingTransition(0, 0);
-
-//                setContentView(R.layout.activity_record)
-//                // Toolbar用の変数を用意
-//                var toolbar = findViewById<Toolbar>(R.id.toolbar)
-//                // setSupportActionBar()によってtoolbarをActionBarと同じ様に使う事ができる
-//                setSupportActionBar(toolbar)
-//
-                // ListView にリスト項目と ArrayAdapter を設定
-                //val listView : ListView = findViewById(R.id.listView)
-                //listView.adapter = arrayAdapter
-
-
             }
         }
         return false
     }
 
+    // goodsDataListへ引数の要素を追加する
     fun addGoodsDataList(goodsData: GoodsData) {
         this.goodsDataList.add(goodsData)
     }
 
+    // goodsDataListを返す
     fun getGoodsDataList() : ArrayList<GoodsData>{
         return this.goodsDataList
+    }
+
+    // urlを返す
+    fun getUrl(): String {
+        return this.url
     }
 
     // goodsDataListへローカル保存されている値を設定する
@@ -106,7 +91,7 @@ class MainActivity : AppCompatActivity() {
         // （ただし、同じ user ID を共有しているアプリケーションもアクセスできる）
         val prefs2 = PreferenceManager.getDefaultSharedPreferences(this)
         // 保存されている商品情報の数だけ繰り返す
-        for (i in 0..prefs2.all.size) {
+        for (i in 1..prefs2.all.size) {
             // getString()にて
             // 第一引数：保存データのキー値　element0,element1,...elementN
             // 第二引数：取得できなかった場合の仮値
@@ -122,9 +107,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun getUrl(): String {
-        return this.url
-    }
+
 }
 
 

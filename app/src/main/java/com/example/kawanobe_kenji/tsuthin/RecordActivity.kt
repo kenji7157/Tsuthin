@@ -31,10 +31,9 @@ class RecordActivity : AppCompatActivity() {
         //val state = intent.getSerializableExtra(KEY_STATE)
         val goodsDataList = intent.getSerializableExtra(KEY_STATE) as ArrayList<GoodsData>
 
-
         // arrayAdapterへgoodsDataListの要素を追加
         for (goodsData in goodsDataList) {
-            arrayAdapter?.add(GoodsData(goodsData?.name, goodsData?.beforePrice, goodsData?.nowPrice))
+            arrayAdapter?.add(GoodsData(goodsData?.name, goodsData?.beforePrice, goodsData?.nowPrice, goodsData?.url))
         }
 
         // ListView にリスト項目と ArrayAdapter を設定

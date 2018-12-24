@@ -8,7 +8,7 @@ import android.os.Parcelable
 class GoodsData() : Parcelable {
 
     // 商品名
-    var name = "none"
+    var name : String = "none"
 
     // 登録価格
     var beforePrice : String = "0"
@@ -16,24 +16,30 @@ class GoodsData() : Parcelable {
     // 最新価格
     var nowPrice : String = "0"
 
+    // URL情報
+    var url : String = "none"
+
     constructor(parcel: Parcel) : this() {
         name = parcel.readString()
         beforePrice = parcel.readString()
         nowPrice = parcel.readString()
+        url = parcel.readString()
     }
 
     // セカンダリコンストラクタ-2つ目以降のコンストラクタ。
     // 必ずプライマリコンストラクタ(:this())を呼ぶ必要がある
-    constructor(name: String, beforePrice: String, nowPrice: String) :this() {
+    constructor(name: String, beforePrice: String, nowPrice: String, url: String) :this() {
         this.name = name
         this.beforePrice = beforePrice
         this.nowPrice = nowPrice
+        this.url = url
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(name)
         parcel.writeString(beforePrice)
         parcel.writeString(nowPrice)
+        parcel.writeString(url)
     }
 
     override fun describeContents(): Int {
