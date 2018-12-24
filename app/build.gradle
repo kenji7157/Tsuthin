@@ -34,4 +34,6 @@ dependencies {
     implementation 'com.squareup.okhttp3:okhttp:3.10.0'
     /* スクレイピングに必要なパッケージ */
     implementation 'org.jsoup:jsoup:1.11.3'
+    /* GSONに必要なパッケージ */
+    implementation 'com.google.code.gson:gson:2.8.5'
 }
