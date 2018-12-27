@@ -13,6 +13,9 @@ class RecordActivity : AppCompatActivity() {
     // 変数arrayAdapterを生成
     private var arrayAdapter: MyArrayAdapter? = null
 
+    // 共通データ
+    private var utilData: UtilData = UtilData()
+
     // intent情報のキー定数
     val KEY_STATE = "goodsDataList"
 
@@ -25,15 +28,18 @@ class RecordActivity : AppCompatActivity() {
         // setSupportActionBar()によってtoolbarをActionBarと同じ様に使う事ができる
         setSupportActionBar(toolbar)
 
+        // 共通データの取得
+        utilData = this.application as UtilData
+
         // arrayAdapterのインスタンス生成
         arrayAdapter = MyArrayAdapter(this, 0)
 
-        //val state = intent.getSerializableExtra(KEY_STATE)
-        val goodsDataList = intent.getSerializableExtra(KEY_STATE) as ArrayList<GoodsData>
+        // val state = intent.getSerializableExtra(KEY_STATE)
+        //val goodsDataList = intent.getSerializableExtra(KEY_STATE) as ArrayList<GoodsData>
 
         // arrayAdapterへgoodsDataListの要素を追加
-        for (goodsData in goodsDataList) {
-            arrayAdapter?.add(GoodsData(goodsData?.name, goodsData?.beforePrice, goodsData?.nowPrice, goodsData?.url))
+        for (goodsData in utilData.getGoodsDataList()) {
+            arrayAdapter?.add(GoodsData(goodsData?.name, goodsData.beforePrice, goodsData.nowPrice, goodsData?.url,goodsData.notifyFlag))
         }
 
         // ListView にリスト項目と ArrayAdapter を設定

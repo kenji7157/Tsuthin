@@ -1,58 +1,31 @@
 package com.example.kawanobe_kenji.tsuthin
 
-import android.os.Parcel
-import android.os.Parcelable
-
 // リスト項目のデータ
 // プライマリコンストラクタ -クラス定義と一緒に定義されるコンストラクタ
-class GoodsData() : Parcelable {
+class GoodsData()  {
 
     // 商品名
     var name : String = "none"
 
     // 登録価格
-    var beforePrice : String = "0"
+    var beforePrice : String = "¥---"
 
     // 最新価格
-    var nowPrice : String = "0"
+    var nowPrice : String = "¥---"
 
     // URL情報
     var url : String = "none"
 
-    constructor(parcel: Parcel) : this() {
-        name = parcel.readString()
-        beforePrice = parcel.readString()
-        nowPrice = parcel.readString()
-        url = parcel.readString()
-    }
+    //　通知設定フラグ true/false 通知発動ON/通知発動OFF
+    var notifyFlag : Boolean = false
 
     // セカンダリコンストラクタ-2つ目以降のコンストラクタ。
     // 必ずプライマリコンストラクタ(:this())を呼ぶ必要がある
-    constructor(name: String, beforePrice: String, nowPrice: String, url: String) :this() {
+    constructor(name: String, beforePrice: String, nowPrice: String, url: String, notifyFlag: Boolean) :this() {
         this.name = name
         this.beforePrice = beforePrice
         this.nowPrice = nowPrice
         this.url = url
-    }
-
-    override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeString(name)
-        parcel.writeString(beforePrice)
-        parcel.writeString(nowPrice)
-        parcel.writeString(url)
-    }
-
-    override fun describeContents(): Int {
-        return 0
-    }
-
-    companion object CREATOR : Parcelable.Creator<GoodsData> {
-        override fun createFromParcel(parcel: Parcel): GoodsData {
-            return GoodsData(parcel)
-        }
-
-        override fun newArray(size: Int): Array<GoodsData?> {
-            return arrayOfNulls(size)
-        }
+        this.notifyFlag = notifyFlag
     }
 }
