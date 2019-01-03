@@ -2,7 +2,11 @@ package com.example.kawanobe_kenji.tsuthin
 
 // リスト項目のデータ
 // プライマリコンストラクタ -クラス定義と一緒に定義されるコンストラクタ
+// 商品情報クラス
 class GoodsData()  {
+
+    // インデックス登録番号 された順番
+    var index :String = "none"
 
     // 商品名
     var name : String = "none"
@@ -21,7 +25,8 @@ class GoodsData()  {
 
     // セカンダリコンストラクタ-2つ目以降のコンストラクタ。
     // 必ずプライマリコンストラクタ(:this())を呼ぶ必要がある
-    constructor(name: String, beforePrice: String, nowPrice: String, url: String, notifyFlag: Boolean) :this() {
+    constructor(index: String, name: String, beforePrice: String, nowPrice: String, url: String, notifyFlag: Boolean) :this() {
+        this.index = index
         this.name = name
         this.beforePrice = beforePrice
         this.nowPrice = nowPrice

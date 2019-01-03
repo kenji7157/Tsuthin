@@ -8,6 +8,7 @@ import com.google.gson.Gson
 import org.jsoup.Jsoup
 import java.io.IOException
 
+// 共通データクラス
 class UtilData : Application(){
     // パッケージ名
     private val pacName = "com.example.kawanobe_kenji.tsuthin"
@@ -26,18 +27,31 @@ class UtilData : Application(){
 
         // edit() メソッド :SharedPreferencesのインスタンスから、SharedPreferences.Editor オブジェクトを取得
         val editor = prefs.edit()
+        // 一度保存されている情報を削除し新たに保存する
+        editor.clear()
+
         val gson = Gson()
         var json: String
         // 新規追加するelement番号numの設定
         // 保存されている商品情報の数
         //var num = prefs.all.size
-        for (e in this.goodsDataList) {
-            json = gson.toJson(e)
-            // putString()にて
-            // 第一引数：保存データのキー値　URL情報をキーとする
-            // 第二引数：保存データ
-            editor.putString("element"+this.goodsDataList.size.toString(), json)
-            //num++
+        // 商品情報リストサイズが0以外でないとIndexOutOfBoundsExceptionが発生
+        if(this.goodsDataList.size != 0) {
+            // 0 <= num < this.goodsDataList.size
+            for (num in 0 until this.goodsDataList.size) {
+                System.out.println("削除機能テスト:"+num+","+this.goodsDataList.size)
+                // ローカル保存時にインデックスの値を決定し保存する
+                this.goodsDataList[num].index = (num + 1).toString()
+                json = gson.toJson(this.goodsDataList[num])
+                // putString()にて
+                // 第一引数：保存データのキー値　URL情報をキーとする
+                // 第二引数：保存データ
+                editor.putString("element" + (num + 1).toString(), json)
+            }
+        }
+        // 削除機能の為実装
+        else{
+            //editor.clear()
         }
         // データを同期的に書き込み
         editor.commit()
@@ -49,11 +63,12 @@ class UtilData : Application(){
             val context = createPackageContext(pacName, Context.CONTEXT_RESTRICTED)
             val prefs2 = PreferenceManager.getDefaultSharedPreferences(context)
             // 保存されている商品情報の数だけ繰り返す
-            for (num in 1..prefs2.all.size) {
+            System.out.println("保存されている情報:"+prefs2.all.size)
+            for (num in 0 until prefs2.all.size) {
                 // getString()にて
                 // 第一引数：保存データのキー値　element0,element1,...elementN
                 // 第二引数：取得できなかった場合の仮値
-                val json = prefs2.getString("element" + num.toString(), "")
+                val json = prefs2.getString("element" + (num+1).toString(), "")
                 val gson2 = Gson()
                 // JSONからJavaオブジェクト(GoodsData)への変換
                 val goodsData = gson2.fromJson<GoodsData>(json, GoodsData::class.java!!)
@@ -89,69 +104,23 @@ class UtilData : Application(){
         this.goodsDataList.add(goodsData)
         this.setLocalData()
     }
-    /*
 
-    fun test(){
-        System.out.println("test実行")
-    }
-
-    // 商品情報リストに登録されているURLから商品情報を取得し商品情報リストを更新する
-    fun getGoods() {
-        // ローカルデータの取得
+    // 商品情報リストの要素を削除
+    fun delGoodsDataList(name: String){
         this.getLocalData()
-        /* スクレイピングの実装 */
-        var goodsData :GoodsData = GoodsData()
-        // 再設定用 商品情報リスト
-        var renewList : ArrayList<GoodsData> = ArrayList()
-        try {
-            for (element in this.goodsDataList) {
-
-                // 指定したURLにGETメソッドでアクセス
-                // 結果をパース(テキストのみを取得)し Documentオブジェクトに格納
-                val document = Jsoup.connect(element.url).get()
-                /*
-                // "h1"タグが持つテキスト群に絞る
-                var h1List = document.select("h1")
-                // "h1"タグが持つテキスト群の要素から商品名を取得する
-                for (element in h1List) {
-                    // 商品名の取得
-                    // "span"タグの"class"属性値が"item-name"のテキスト要素かの判定
-                    if ( element.attr("class").equals("item-name") ) {
-                        // 商品名の設定
-                        goodsData.name = element.text().toString()
-                    }
-                }
-
-                // "span"タグが持つテキスト群に絞る
-                var spanList = document.select("span")
-                // "span"タグが持つテキスト群の要素から(登録)価格を取得する
-                for (element in spanList) {
-                    // (登録)価格の取得
-                    // "span"タグの"class"属性値が"item-price bold"のテキスト要素かの判定
-                    if ( element.attr("class").equals("item-price bold") ) {
-                        // 登録価格の設定
-                        goodsData.beforePrice = element.text().toString()
-                    }
-                }
-
-                // 商品名の設定
-                goodsData.nowPrice = "¥ ---"
-
-                // url情報の設定
-                goodsData.url = element.url
-
-                renewList.add(goodsData)
-                */
+        // 削除対象の要素を取得する
+        var delObject = GoodsData()
+        for(e in this.goodsDataList){
+            if(e.name == name){
+                delObject = e
+                System.out.println("削除対象オブジェクトの抽出成功"+delObject.name)
             }
-            System.out.println("button3を押下")
-            Log.i("getGoods実行中", "")
-            // 商品情報リストの更新
-            if(renewList.size != 0) {
-                renew(renewList)
-            }
-        } catch (e: IOException) {
-            e.printStackTrace()
         }
-    }*/
+        //System.out.println("サイズ削除前:"+this.goodsDataList.size)
+        this.goodsDataList.remove(delObject)
+        //System.out.println("サイズ削除後・保存前:"+this.goodsDataList.size)
+        this.setLocalData()
+        //System.out.println("サイズ保存後:"+this.goodsDataList.size)
+    }
 
 }

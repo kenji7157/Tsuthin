@@ -24,6 +24,7 @@ class MyArrayAdapter : ArrayAdapter<GoodsData> {
             view = inflater!!.inflate(R.layout.list_item, parent, false)
 
             viewHolder = ViewHolder(
+                    view.findViewById(R.id.index),
                     view.findViewById(R.id.name),
                     view.findViewById(R.id.beforePrice),
                     view.findViewById(R.id.nowPrice)
@@ -35,9 +36,10 @@ class MyArrayAdapter : ArrayAdapter<GoodsData> {
 
         // 項目の情報を設定
         val listItem = getItem(position)
+        viewHolder.indexView.text = listItem.index
         viewHolder.nameView.text = listItem.name
-        viewHolder.beforePriceView.text = listItem.beforePrice.toString()
-        viewHolder.nowPriceView.text = listItem.nowPrice.toString()
+        viewHolder.beforePriceView.text = listItem.beforePrice
+        viewHolder.nowPriceView.text = listItem.nowPrice
 
         return view!!
     }

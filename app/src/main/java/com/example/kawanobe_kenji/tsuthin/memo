@@ -28,3 +28,44 @@
 
 対応
 非同期処理の完了を確認する処理をGoodsServiceに記述した。
+
+障害No2 レイアウト修正　20181228
+main
+<android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+         android:layout_marginBottom="1dp"
+        android:background="#fe3c31"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toTopOf="@+id/urlText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:titleTextColor="@android:color/background_light" />
+
+record
+<android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="1dp"
+        android:background="#fe3c31"
+        android:minHeight="?attr/actionBarSize"
+        android:theme="?attr/actionBarTheme"
+        app:layout_constraintBottom_toTopOf="@+id/listView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:titleTextColor="@android:color/background_light" />
+
+
+20190103 非同期処理機能をアクティビティ用とサービス用に分割を成功　URLチェックの完了
+
+next 通知機能のテスト 完了
+
+next 削除機能のテスト
+削除すると末尾の商品がその分リストに追加される

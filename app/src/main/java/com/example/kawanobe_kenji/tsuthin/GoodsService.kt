@@ -1,5 +1,6 @@
 package com.example.kawanobe_kenji.tsuthin
 
+import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
@@ -13,17 +14,22 @@ import kotlin.collections.ArrayList
 
 class GoodsService : Service() {
 
-    // intent情報のキー定数
-    val KEY_STATE = "goodsDataList"
-
     // 共通データ
     var utilData: UtilData = UtilData()
 
     private var timer: Timer = Timer()
 
-    // 非同期処理実行可能判定フラグ　true/false 実行可能/実行禁止(実行完了待ち)
-    private var taskFlag = true
+    // サービス実行フラグ　true/false 実行可能/実行禁止(実行完了待ち)
+    private var serviceTaskFlag= true
 
+    //
+    fun serviceTaskStart(){
+        this.serviceTaskFlag = false
+    }
+
+    fun serviceTaskStop(){
+        this.serviceTaskFlag = true
+    }
 
     // bindService() で呼び出した場合,onStartCommand() ではなく
     // onBind() がcallbackされます
@@ -33,31 +39,33 @@ class GoodsService : Service() {
 
     // サービスで実行させたいコードはここに記述
     override fun onStartCommand(intent: Intent, flags: Int, startId: Int): Int {
+        System.out.println("サービス処理の開始")
+
         // 共通データの取得
         utilData = this.application as UtilData
 
-        // val state = intent.getSerializableExtra(KEY_STATE)
-        //val goodsDataList = intent.getSerializableExtra(KEY_STATE) as ArrayList<GoodsData>
-
-        // 非同期（別スレッド）で定期的(１秒ごと)に処理を実行させるためにTimerを利用する
+        // 非同期（別スレッド）で定期的(2 秒ごと)に処理を実行させるためにTimerを利用する
         timer = Timer()
         timer.schedule(object : TimerTask() {
             override fun run() {
-                if(taskFlag) {
+                if(serviceTaskFlag) {
+                    System.out.println("サービス非同期処理の開始は解禁中")
                     System.out.println("更新対象の数" + utilData.getGoodsDataList().size)
                     //GoodsAsyncTask().getGoods("")
                     // 共通データ.商品情報リストが空の場合は実行しない
                     if (utilData.getGoodsDataList().size != 0) {
                         // 共通データ.商品情報リストに登録されているURLの商品情報を取得する
-                        GoodsAsyncTask(this@GoodsService).execute(utilData.getGoodsDataList())
+                        ServiceAsyncTask(null).execute(utilData.getGoodsDataList())
                         //utilData.getGoods()
-                        //GoodsAsyncTask().execute(utilData.getGoodsDataList())
+                        //ServiceAsyncTask().execute(utilData.getGoodsDataList())
                     }
                     // 通知判定フラグの更新を反映
                     utilData.renew(callNotify(utilData.getGoodsDataList()))
+                }else{
+                    System.out.println("サービス非同期処理の開始は禁止中")
                 }
             }
-        }, 0, 1000) //1000 ->　１秒
+        }, 0, 2000) //2000ミリ秒 ->　2秒 60秒 -> 60000
 
         // ↓通知イベント処理
         //callNotify()
@@ -70,7 +78,9 @@ class GoodsService : Service() {
         super.onDestroy()
         // timerをキャンセル
         timer.cancel()
+        System.out.println("サービス処理の終了")
     }
+
 
     // 通知イベント処理
     private fun callNotify(goodsDataList : ArrayList<GoodsData>): ArrayList<GoodsData>{
@@ -99,42 +109,50 @@ class GoodsService : Service() {
             // 通知チャンネルの登録
             notificationManager.createNotificationChannel(mChannel)
         }
-        // メッセージ用文字列
-        var contextText = ""
-        // 商品情報リストに通知ONになっているものがいるか確認する
+
+        // 通知メッセージ用変数
+        var notification: Notification
+
+
+        // 商品情報リスト(引数)に通知ONになっているものがいるか確認する
         for (goodsData in goodsDataList) {
             // 通知ONのものがいるか調べる
             if(goodsData.notifyFlag){
-                contextText += goodsData.name
+
+
+                var contextText = "商品名:" + goodsData.name + " が値下げされました。"
                 // 通知発動したので通知判定フラグをOFFに更新
                 goodsData.notifyFlag = false
 
+                notification = NotificationCompat
+                        .Builder(this, id)
+                        .apply {
+                            setSmallIcon(R.drawable.ic_launcher_background)
+                            setContentTitle("商品情報更新通知")
+                            setContentText(contextText)
+                        }.build()
+
+                // 通知を発行する
+                notificationManager.notify(1, notification)
             }
+
+
             resultList.add(goodsData)
         }
-        val notification = NotificationCompat
-                .Builder(this, id)
-                .apply {
-                    setSmallIcon(R.drawable.ic_launcher_background)
-                    setContentTitle("商品情報更新通知")
-                    setContentText("Text")
-                }.build()
 
-        // 通知を発行
-        // 第一引数 通知を識別する数値
-        if(!contextText.equals("")) {
-            notificationManager.notify(1, notification)
-        }
+
+
         return resultList
     }
 
+    /*
     fun taskStart(){
         this.taskFlag = false
     }
 
     fun taskFinish(){
         this.taskFlag = true
-    }
+    }*/
 
 
 

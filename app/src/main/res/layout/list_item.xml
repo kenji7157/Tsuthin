@@ -1,38 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.v7.widget.LinearLayoutCompat xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:focusableInTouchMode="true">
 
     <TextView
-        android:id="@+id/name"
-        android:layout_width="wrap_content"
+        android:id="@+id/index"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="商品名"
+        android:layout_weight="1"
+        android:text="No"
         android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/beforePrice"
+        android:gravity="center"
+        android:background="@drawable/list_element_background"
+        android:singleLine="true"
         app:layout_constraintStart_toStartOf="parent"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintEnd_toStartOf="@+id/name" />
+
+    <HorizontalScrollView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:background="@drawable/header_background">
+
+        <TextView
+            android:id="@+id/name"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="商品名"
+            android:textSize="24sp"
+            android:clickable="true"
+            android:onClick="deleteGoods"
+            app:layout_constraintEnd_toStartOf="@+id/beforePrice"
+            app:layout_constraintStart_toStartOf="@+id/index" />
+
+    </HorizontalScrollView>
 
     <TextView
         android:id="@+id/beforePrice"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="登録時価格"
+        android:layout_weight="3"
+        android:text="登録価格"
         android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/nowPrice"
+        android:gravity="right"
+        android:background="@drawable/list_element_background"
+        android:singleLine="true"
         app:layout_constraintStart_toEndOf="@+id/name"
-        tools:layout_editor_absoluteY="16dp" />
+        app:layout_constraintEnd_toStartOf="@+id/nowPrice" />
 
     <TextView
         android:id="@+id/nowPrice"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="最新価格"
+        android:layout_weight="3"
+        android:text="更新価格"
         android:textSize="24sp"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:gravity="right"
+        android:background="@drawable/list_element_background"
+        android:singleLine="true"
         app:layout_constraintStart_toEndOf="@+id/beforePrice"
-        tools:layout_editor_absoluteY="16dp" />
-</android.support.constraint.ConstraintLayout>
+        app:layout_constraintEnd_toEndOf="parent" />
+
+
+</android.support.v7.widget.LinearLayoutCompat>
